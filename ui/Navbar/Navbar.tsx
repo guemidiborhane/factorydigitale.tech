@@ -14,10 +14,12 @@ export default function Navbar() {
         <NavLink to="/">
           {t('resources.home')}
         </NavLink>
-        <NavLink to="/movies" can="movies:index">
+        <NavLink to={routes.movies} can="movies:index">
           {t('resources.movies')}
         </NavLink>
-
+        <NavLink to={routes.movies_favourites} can="movies:favourite">
+          {t('resources.favourites')}
+        </NavLink>
       </div>
 
       <div>

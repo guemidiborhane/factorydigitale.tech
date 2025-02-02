@@ -10,7 +10,7 @@ export default function Toaster(props: ToasterProps) {
   const options = props ?? {}
   options.position = 'bottom-left'
   options.toastOptions = {
-    duration: Infinity
+    duration: 500
   }
 
   return (

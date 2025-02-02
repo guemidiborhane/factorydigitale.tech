@@ -8,4 +8,5 @@ import (
 func setupRoutes(r fiber.Router) {
 	r.Get("/movies", users.Can("movies:index"), IndexMovies)
 	r.Post("/movies/favourite", users.Can("movies:favourite"), FavouriteMovie)
+	r.Get("/movies/favourites", users.Can("movies:favourite"), IndexFavourites)
 }

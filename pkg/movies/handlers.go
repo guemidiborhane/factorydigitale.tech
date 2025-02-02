@@ -27,10 +27,6 @@ import (
 func IndexMovies(c *fiber.Ctx) error {
 	var movies []models.Movie
 	var results meilisearch.DocumentsResult
-	user, err := auth.GetCurrentUser(c)
-	if err != nil {
-		return err
-	}
 	offset := c.QueryInt("offset", 0)
 
 	models.MoviesIndex.GetDocuments(&meilisearch.DocumentsQuery{
@@ -41,16 +37,29 @@ func IndexMovies(c *fiber.Ctx) error {
 	jsonData, _ := json.Marshal(results.Results)
 	json.Unmarshal(jsonData, &movies)
 
+	if err := CheckFavouritesForCurrentUser(&movies, c); err != nil {
+		return errors.Unexpected(err)
+	}
+
+	return c.Status(fiber.StatusOK).JSON(movies)
+}
+
+func CheckFavouritesForCurrentUser(movies *[]models.Movie, c *fiber.Ctx) error {
+	user, err := auth.GetCurrentUser(c)
+	if err != nil {
+		return err
+	}
+
 	favourites, err := user.Favourites()
 	if err != nil {
 		return err
 	}
 
-	for i, movie := range movies {
-		movies[i].InFavourites = slices.Contains(favourites, movie.ID)
+	for i, movie := range *movies {
+		(*movies)[i].InFavourites = slices.Contains(favourites, movie.ID)
 	}
 
-	return c.Status(fiber.StatusOK).JSON(movies)
+	return nil
 }
 
 type FavouriteRequestParams struct {
@@ -60,7 +69,7 @@ type FavouriteRequestParams struct {
 // @Summary	Toggle movie to/from your Favourites
 // @Tags		Movie
 // @Produce	json
-// @Param		body	body		FavouriteRequestParams	true "Favourite Request"
+// @Param		body	body		FavouriteRequestParams	true	"Favourite Request"
 // @Success	200		{object}	models.Favourite
 // @Failure	403		{object}	errors.HttpError
 // @Failure	500		{object}	errors.HttpError
@@ -98,4 +107,39 @@ func FavouriteMovie(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).JSON(favourite)
+}
+
+// @Summary	Index Favourites
+// @Tags		Movie
+// @Produce	json
+// @Success	200	{object}	[]models.Movie
+// @Failure	403	{object}	errors.HttpError
+// @Failure	500	{object}	errors.HttpError
+// @Router		/api/movies/favourites [get]
+func IndexFavourites(c *fiber.Ctx) error {
+	var movies []models.Movie
+
+	user, err := auth.GetCurrentUser(c)
+	if err != nil {
+		return err
+	}
+
+	ids, err := user.Favourites()
+	if err != nil {
+		return err
+	}
+	logger.Debug("ids", logger.Attrs{
+		"ids": ids,
+	})
+
+	movies, err = models.GetMoviesByIDs(ids)
+	if err != nil {
+		return errors.Unexpected(err)
+	}
+
+	for i := range movies {
+		movies[i].InFavourites = true
+	}
+
+	return c.Status(fiber.StatusOK).JSON(movies)
 }

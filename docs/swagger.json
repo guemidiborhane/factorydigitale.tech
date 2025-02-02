@@ -169,6 +169,40 @@
                 }
             }
         },
+        "/api/movies/favourites": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movie"
+                ],
+                "summary": "Index Favourites",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Movie"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/permissions": {
             "get": {
                 "consumes": [

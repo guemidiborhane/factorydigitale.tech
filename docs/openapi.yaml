@@ -120,6 +120,32 @@ paths:
       summary: Toggle movie to/from your Favourites
       tags:
         - Movie
+  /api/movies/favourites:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Movie"
+                type: array
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+      summary: Index Favourites
+      tags:
+        - Movie
   /api/permissions:
     get:
       responses:

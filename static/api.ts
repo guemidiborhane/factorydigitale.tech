@@ -74,6 +74,14 @@ export type APIEndpoints = {
       body: APISchemas["pkg_movies.FavouriteRequestParams"]
     }
   }
+  "/api/movies/favourites": {
+    responses: {
+      get: Array<
+        APISchemas["github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Movie"]
+      >
+    }
+    requests: { method?: "get" }
+  }
   "/api/permissions": {
     responses: { get: APISchemas["pkg_permissions.PermissionsResponse"] }
     requests: { method?: "get" }
