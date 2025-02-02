@@ -107,6 +107,12 @@ const docTemplate = `{
                         "description": "offset for paging",
                         "name": "offset",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search term",
+                        "name": "query",
+                        "in": "query"
                     }
                 ],
                 "responses": {

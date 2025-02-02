@@ -65,6 +65,11 @@ paths:
           name: offset
           schema:
             type: integer
+        - description: search term
+          in: query
+          name: query
+          schema:
+            type: string
       responses:
         "200":
           description: OK

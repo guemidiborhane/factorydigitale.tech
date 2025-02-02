@@ -16,25 +16,42 @@ import (
 	"gorm.io/gorm"
 )
 
-// @Summary	Index Movies
-// @Tags		Movie
-// @Produce	json
-// @Param		offset	query		int	false	"offset for paging"
-// @Success	200		{object}	[]models.Movie
-// @Failure	403		{object}	errors.HttpError
-// @Failure	500		{object}	errors.HttpError
-// @Router		/api/movies [get]
+//	@Summary	Index Movies
+//	@Tags		Movie
+//	@Produce	json
+//	@Param		offset	query		int		false	"offset for paging"
+//	@Param		query	query		string	false	"search term"
+//	@Success	200		{object}	[]models.Movie
+//	@Failure	403		{object}	errors.HttpError
+//	@Failure	500		{object}	errors.HttpError
+//	@Router		/api/movies [get]
 func IndexMovies(c *fiber.Ctx) error {
 	var movies []models.Movie
-	var results meilisearch.DocumentsResult
+	var results interface{}
 	offset := c.QueryInt("offset", 0)
+	query := c.Query("query")
+	limit := int64(10)
 
-	models.MoviesIndex.GetDocuments(&meilisearch.DocumentsQuery{
-		Limit:  10,
-		Offset: int64(offset),
-	}, &results)
+	if query != "" {
+		response, err := models.MoviesIndex.Search(query, &meilisearch.SearchRequest{
+			Limit: limit,
+		})
+		if err != nil {
+			return errors.Unexpected(err)
+		}
 
-	jsonData, _ := json.Marshal(results.Results)
+		results = response.Hits
+	} else {
+		var r meilisearch.DocumentsResult
+
+		models.MoviesIndex.GetDocuments(&meilisearch.DocumentsQuery{
+			Limit:  limit,
+			Offset: int64(offset),
+		}, &r)
+		results = r.Results
+	}
+
+	jsonData, _ := json.Marshal(results)
 	json.Unmarshal(jsonData, &movies)
 
 	if err := CheckFavouritesForCurrentUser(&movies, c); err != nil {
@@ -66,14 +83,14 @@ type FavouriteRequestParams struct {
 	MovieID int `json:"movie_id"`
 }
 
-// @Summary	Toggle movie to/from your Favourites
-// @Tags		Movie
-// @Produce	json
-// @Param		body	body		FavouriteRequestParams	true	"Favourite Request"
-// @Success	200		{object}	models.Favourite
-// @Failure	403		{object}	errors.HttpError
-// @Failure	500		{object}	errors.HttpError
-// @Router		/api/movies/favourite [post]
+//	@Summary	Toggle movie to/from your Favourites
+//	@Tags		Movie
+//	@Produce	json
+//	@Param		body	body		FavouriteRequestParams	true	"Favourite Request"
+//	@Success	200		{object}	models.Favourite
+//	@Failure	403		{object}	errors.HttpError
+//	@Failure	500		{object}	errors.HttpError
+//	@Router		/api/movies/favourite [post]
 func FavouriteMovie(c *fiber.Ctx) error {
 	var body FavouriteRequestParams
 	user, err := auth.GetCurrentUser(c)
@@ -109,13 +126,13 @@ func FavouriteMovie(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(favourite)
 }
 
-// @Summary	Index Favourites
-// @Tags		Movie
-// @Produce	json
-// @Success	200	{object}	[]models.Movie
-// @Failure	403	{object}	errors.HttpError
-// @Failure	500	{object}	errors.HttpError
-// @Router		/api/movies/favourites [get]
+//	@Summary	Index Favourites
+//	@Tags		Movie
+//	@Produce	json
+//	@Success	200	{object}	[]models.Movie
+//	@Failure	403	{object}	errors.HttpError
+//	@Failure	500	{object}	errors.HttpError
+//	@Router		/api/movies/favourites [get]
 func IndexFavourites(c *fiber.Ctx) error {
 	var movies []models.Movie
 

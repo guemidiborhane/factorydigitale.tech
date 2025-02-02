@@ -17,7 +17,7 @@ func Setup(database *gorm.DB) {
 	Db = database
 
 	MoviesIndex = storage.MeiliClient.Index("movies")
-	filterableAttributes := []string{"genres", "id"}
+	filterableAttributes := []string{"genres", "id", "title", "overview"}
 	MoviesIndex.UpdateFilterableAttributes(&filterableAttributes)
 	if !fiber.IsChild() {
 		go Db.AutoMigrate(&Favourite{})

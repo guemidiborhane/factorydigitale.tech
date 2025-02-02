@@ -63,7 +63,7 @@ export type APIEndpoints = {
         APISchemas["github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Movie"]
       >
     }
-    requests: { method?: "get"; query?: { offset?: number } }
+    requests: { method?: "get"; query?: { offset?: number; query?: string } }
   }
   "/api/movies/favourite": {
     responses: {
