@@ -1,0 +1,37 @@
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.Modal {
+    @apply absolute inset-0;
+    @apply flex justify-center items-center;
+
+    animation: fade-in 0.1s ease-in-out;
+
+    &Box {
+        max-height: calc(100vh - 2rem)
+    }
+
+    &CloseButton {
+        @apply fixed top-2 right-2 text-white text-xl;
+
+        &Icon {
+            @apply text-white;
+
+            &:hover {
+                @apply text-red-500;
+            }
+        }
+    }
+
+    &OverLay {
+        @apply absolute inset-0;
+        @apply bg-black/70 z-0;
+    }
+}

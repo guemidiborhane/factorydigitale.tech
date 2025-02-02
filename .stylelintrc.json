@@ -1,0 +1,8 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "rules": {
+    "selector-class-pattern": "^([A-Z][a-zA-Z0-9]*)?$",
+    "no-eol-whitespace": true,
+    "indentation": 4
+  }
+}

@@ -1,0 +1,17 @@
+.Card {
+    @apply block w-full;
+
+    &Title {
+        @apply text-3xl text-center select-none;
+    }
+
+    &Icon {
+        &Valid {
+            @apply text-green-500;
+        }
+
+        &Invalid {
+            @apply text-red-500;
+        }
+    }
+}

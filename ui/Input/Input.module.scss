@@ -1,0 +1,41 @@
+%focus-style {
+    @apply shadow outline-none border-gray-500;
+
+    box-shadow: 0 0 0 0.2rem theme('colors.gray.200');
+    background-clip: padding-box;
+}
+
+.Input {
+    @apply appearance-none block w-full text-gray-700 border border-gray-400 rounded px-3 leading-tight bg-white;
+
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+
+    &[type='text']:read-only {
+        @apply cursor-not-allowed;
+    }
+}
+
+.Input:focus,
+.Input:hover {
+    @extend %focus-style;
+}
+
+.Label {
+    @apply block text-gray-700 text-lg font-bold mb-2;
+
+    &Required::after {
+        content: ' *';
+    }
+}
+
+
+.HasError {
+    .Input {
+        @apply border-2 border-red-500;
+    }
+
+    .HelpBlock {
+        @apply text-red-500 font-semibold;
+    }
+}

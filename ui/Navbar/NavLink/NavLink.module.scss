@@ -1,0 +1,10 @@
+.NavLink {
+    @apply h-full inline-flex items-center;
+    @apply px-3;
+
+    &:hover,
+    &:active,
+    &Active {
+        @apply bg-gray-200 transition-colors duration-75;
+    }
+}

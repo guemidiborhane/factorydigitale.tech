@@ -1,0 +1,43 @@
+{
+  "models": {
+    "user": {
+      "username": "اسم المستخدم",
+      "password": "كلمة المرور"
+    }
+  },
+  "paths": {
+    "/api/permissions/{role}": {
+      "loading": "تسجيل الصلاحيات",
+      "success": "تم تسجيل الصلاحيات بنجاح",
+      "error": "فشل تسجيل الصلاحيات"
+    },
+    "/api/auth": {
+      "loading": "تسجيل الدخول",
+      "success": "تم تسجيل الدخول بنجاح",
+      "error": "فشل تسجيل الدخول"
+    },
+    "/api/permissions": {
+      "loading": "تحميل الصلاحيات",
+      "success": "تم تحميل الصلاحيات بنجاح",
+      "error": "فشل تحميل الصلاحيات"
+    }
+  },
+  "misc": {
+    "sign_in": "تسجيل الدخول",
+    "sign_out": "تسجيل الخروج",
+    "confirmation_msg": "هل أنت متأكد؟",
+    "submit": "تسجيل",
+    "close": "اغلاق"
+  },
+  "validations": {
+    "required": "لا يمكن أن يكون محتوى __field__ فارغاً"
+  },
+  "resources": {
+    "home": "الصفحة الرئيسية",
+    "permissions": {
+      "zero": "صلاحية",
+      "one": "صلاحية",
+      "many": "صلاحيات"
+    }
+  }
+}

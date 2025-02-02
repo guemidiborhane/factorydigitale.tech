@@ -1,0 +1,422 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: guemidiborhane@gmail.com
+    name: API
+  description: Interview
+  title: FactoryDigitale
+  version: "1.0"
+paths:
+  /api/auth:
+    delete:
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+      summary: Logout user
+      tags:
+        - Users
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/pkg_users_auth.LoginParams"
+        description: LoginRequest
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/pkg_users_auth.UserResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+      summary: Login user
+      tags:
+        - Users
+  /api/movies:
+    get:
+      parameters:
+        - description: offset for paging
+          in: query
+          name: offset
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Movie"
+                type: array
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+      summary: Index Movies
+      tags:
+        - Core
+  /api/permissions:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/pkg_permissions.PermissionsResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+      summary: Index Permissions
+      tags:
+        - Permissions
+  "/api/permissions/{role}":
+    post:
+      parameters:
+        - description: Role
+          in: path
+          name: role
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/pkg_permissions.PermissionsParams"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+      summary: Store Role
+      tags:
+        - Permissions
+    put:
+      parameters:
+        - description: Role
+          in: path
+          name: role
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: "#/components/requestBodies/pkg_permissions.PermissionsParams"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+      summary: Store Role
+      tags:
+        - Permissions
+  /api/user:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/pkg_users.UserJSONResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+      summary: Show User
+      tags:
+        - Users
+  /api/user/check:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: boolean
+      summary: Check
+      tags:
+        - Users
+  /api/users:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/pkg_users.UserRegisterParams"
+        description: Register request
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_pkg_users_auth.UserResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+      summary: Register User
+      tags:
+        - Users
+servers:
+  - url: /
+components:
+  requestBodies:
+    pkg_permissions.PermissionsParams:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/pkg_permissions.PermissionsParams"
+      description: RoleDefinition
+      required: true
+  schemas:
+    github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties:
+                type: string
+        status:
+          type: integer
+      required:
+        - code
+        - message
+        - status
+      type: object
+    github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Movie:
+      properties:
+        genres:
+          items:
+            type: string
+          type: array
+        id:
+          type: integer
+        overview:
+          type: string
+        poster:
+          type: string
+        release_date:
+          type: integer
+        title:
+          type: string
+      type: object
+    github_com_guemidiborhane_factorydigitale_tech_pkg_users_auth.UserResponse:
+      properties:
+        id:
+          type: integer
+        role:
+          type: string
+        username:
+          type: string
+      required:
+        - id
+        - role
+        - username
+      type: object
+    github_com_guemidiborhane_factorydigitale_tech_pkg_users_auth.UserTracks:
+      properties:
+        ips:
+          items:
+            items:
+              type: string
+            type: array
+          type: array
+        login_count:
+          type: integer
+      type: object
+    pkg_permissions.PermissionsParams:
+      additionalProperties:
+        items:
+          type: string
+        type: array
+      type: object
+    pkg_permissions.PermissionsResponse:
+      properties:
+        permissions:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          type: object
+        roles_permissions:
+          $ref: "#/components/schemas/pkg_permissions.RolesPermissionsMap"
+      required:
+        - permissions
+        - roles_permissions
+      type: object
+    pkg_permissions.RolesPermissionsMap:
+      additionalProperties:
+        additionalProperties:
+          items:
+            type: string
+          type: array
+        type: object
+      type: object
+    pkg_users.UserJSONResponse:
+      properties:
+        permissions:
+          items:
+            type: string
+          type: array
+        tracks:
+          $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_pkg_users_auth.UserTracks"
+        user:
+          $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_pkg_users_auth.UserResponse"
+      required:
+        - permissions
+        - tracks
+        - user
+      type: object
+    pkg_users.UserRegisterParams:
+      properties:
+        authenticable_id:
+          type: integer
+        authenticable_type:
+          type: string
+        password:
+          minLength: 6
+          type: string
+        role:
+          type: string
+        username:
+          maxLength: 20
+          minLength: 3
+          type: string
+      required:
+        - authenticable_id
+        - authenticable_type
+        - password
+        - role
+        - username
+      type: object
+    pkg_users_auth.LoginParams:
+      properties:
+        password:
+          type: string
+        username:
+          type: string
+      required:
+        - password
+        - username
+      type: object
+    pkg_users_auth.UserResponse:
+      properties:
+        id:
+          type: integer
+        role:
+          type: string
+        username:
+          type: string
+      required:
+        - id
+        - role
+        - username
+      type: object

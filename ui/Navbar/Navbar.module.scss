@@ -1,0 +1,10 @@
+.Navbar {
+    @apply flex flex-row items-center justify-between;
+    @apply w-full h-14;
+    @apply border-b;
+    @apply px-4;
+
+    & > * {
+        @apply inline-flex flex-row gap-3 h-full items-center;
+    }
+}

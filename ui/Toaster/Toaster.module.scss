@@ -1,0 +1,36 @@
+.Toast {
+    @apply flex max-w-fit w-full bg-white;
+    @apply rounded-lg;
+    @apply ring-1 ring-black ring-opacity-5;
+    @apply shadow-lg pointer-events-auto;
+
+    &AnimationIn {
+        @apply animate-jump-in animate-once animate-duration-150 animate-ease-in-out animate-normal;
+    }
+
+    &AnimationOut {
+        @apply animate-jump-out animate-once animate-duration-150 animate-ease-in-out animate-normal;
+    }
+
+    &Body {
+        @apply flex p-4 gap-3;
+
+        &Message {
+            @apply px-2 font-normal;
+        }
+    }
+
+    &Close{
+        @apply flex border-s border-gray-200;
+
+        &Button {
+            @apply flex justify-center items-center;
+            @apply p-4 w-full;
+            @apply text-sm font-medium text-indigo-600;
+            @apply rounded-none rounded-e-lg border border-transparent;
+
+            &:hover { @apply text-indigo-500 }
+            &:focus { @apply ring-2 ring-indigo-500 outline-none }
+        }
+    }
+}

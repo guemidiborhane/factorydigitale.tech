@@ -1,0 +1,104 @@
+---
+services:
+  redis:
+    image: redis:6-alpine
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: redis-cli ping
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  redis-ui:
+    image: rediscommander/redis-commander:latest
+    restart: always
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      - REDIS_HOSTS=${REDIS_DBS:-local:redis:6379}
+    ports:
+      - "8081:8081"
+
+  database:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_NAME}
+      PGDATA: /var/lib/postgres/data/pgdata
+    volumes:
+      - postgres:/var/lib/postgres/data
+    healthcheck:
+      test: pg_isready -U postgres -h 127.0.0.1
+      interval: 5s
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/go/Dockerfile
+      args:
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+        GO_VERSION: ${GO_VERSION:-1.21}
+    depends_on:
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      node:
+        condition: service_healthy
+      meilisearch:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      APP_ROOT: /app
+      MEILI_MASTER_KEY: ${APP_KEY}
+    volumes:
+      - ./:/app
+      - go_pkg:/go
+    healthcheck:
+      test: curl -f http://localhost:${PORT:-3000}/healthz
+      interval: 5s
+    ports:
+      - ${PORT:-3000}:3000
+
+  node:
+    build:
+      context: .
+      dockerfile: ./docker/node/Dockerfile
+      args:
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+        NODEJS_VERSION: ${NODEJS_VERSION:-22.13}
+    environment:
+      NODE_ENV: development
+    ports:
+      - 5000:5000
+    volumes:
+      - ./:/app
+    healthcheck:
+      test: test -f /app/static/build/index.html
+      interval: 5s
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.12
+    ports:
+      - 7700:7700
+    environment:
+      MEILI_ENV: development
+      MEILI_NO_ANALYTICS: true
+      MEILI_MASTER_KEY: ${APP_KEY}
+    volumes:
+      - meilisearch:/meili_data
+    healthcheck:
+      test: curl -f http://localhost:7700/health
+      interval: 5s
+
+volumes:
+  redis:
+  postgres:
+  go_pkg:
+  meilisearch:
