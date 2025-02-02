@@ -49,7 +49,7 @@ dc:
 
 .PHONY: pre-dev
 pre-dev: .env
-	@$(call dc, up -d database redis)
+	@$(call dc, up -d database redis meilisearch)
 
 dev_services = backend node meilisearch
 .PHONY: dev
@@ -111,9 +111,13 @@ docker-build:
 build:
 	$(call dc, build production)
 
+.PHONY: import-meilisearch
+import-meilisearch:
+	curl -X POST 'http://localhost:7700/indexes/movies/documents?primaryKey=id' -H 'Content-Type: application/json' -H $'Authorization: Bearer (cat .env | grep APP_KEY | sed 's/APP_KEY=//')' --data-binary @dumps/movies.json
+
 .PHONY: import-base-data
 ## Import data from a dump files
-import-base-data:
+import-base-data: pre-dev import-meilisearch
 	@for file in dumps/*.sql.gz; do \
 		file_name=$$(basename $$file .sql.gz); \
 		table_name=$$(echo $$file_name | sed -E 's/^[0-9]+-//'); \
