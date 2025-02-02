@@ -88,7 +88,38 @@ paths:
                 $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
       summary: Index Movies
       tags:
-        - Core
+        - Movie
+  /api/movies/favourite:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/pkg_movies.FavouriteRequestParams"
+        description: Favourite Request
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Favourite"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+      summary: Toggle movie to/from your Favourites
+      tags:
+        - Movie
   /api/permissions:
     get:
       responses:
@@ -291,6 +322,19 @@ components:
         - message
         - status
       type: object
+    github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Favourite:
+      properties:
+        id:
+          type: integer
+        movie_id:
+          type: integer
+        user_id:
+          type: integer
+      required:
+        - id
+        - movie_id
+        - user_id
+      type: object
     github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Movie:
       properties:
         genres:
@@ -299,6 +343,8 @@ components:
           type: array
         id:
           type: integer
+        in_favourites:
+          type: boolean
         overview:
           type: string
         poster:
@@ -307,6 +353,14 @@ components:
           type: integer
         title:
           type: string
+      required:
+        - genres
+        - id
+        - in_favourites
+        - overview
+        - poster
+        - release_date
+        - title
       type: object
     github_com_guemidiborhane_factorydigitale_tech_pkg_users_auth.UserResponse:
       properties:
@@ -330,6 +384,11 @@ components:
             type: array
           type: array
         login_count:
+          type: integer
+      type: object
+    pkg_movies.FavouriteRequestParams:
+      properties:
+        movie_id:
           type: integer
       type: object
     pkg_permissions.PermissionsParams:

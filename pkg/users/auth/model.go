@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/guemidiborhane/factorydigitale.tech/internal/errors"
+	"github.com/guemidiborhane/factorydigitale.tech/pkg/movies/models"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -64,6 +65,15 @@ func (user *User) Get() error {
 	}
 
 	return nil
+}
+
+func (u *User) Favourites() ([]int, error) {
+	var ids []int
+	if err := db.Model(models.Favourite{}).Where("user_id = ?", u.ID).Pluck("movie_id", &ids).Error; err != nil {
+		return []int{}, err
+	}
+
+	return ids, nil
 }
 
 type UserResponse struct {

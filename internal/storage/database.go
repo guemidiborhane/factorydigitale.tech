@@ -45,9 +45,9 @@ func SetupPostgres() {
 	)
 	var err error
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-		QueryFields: true,
+		QueryFields:    true,
+		TranslateError: true,
 	})
-
 	if err != nil {
 		utils.WriteToStderr(err)
 	}

@@ -98,7 +98,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Core"
+                    "Movie"
                 ],
                 "summary": "Index Movies",
                 "parameters": [
@@ -117,6 +117,48 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Movie"
                             }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/movies/favourite": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Movie"
+                ],
+                "summary": "Toggle movie to/from your Favourites",
+                "parameters": [
+                    {
+                        "description": "Favourite Request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/pkg_movies.FavouriteRequestParams"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Favourite"
                         }
                     },
                     "403": {
@@ -408,8 +450,36 @@ const docTemplate = `{
                 }
             }
         },
+        "github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Favourite": {
+            "type": "object",
+            "required": [
+                "id",
+                "movie_id",
+                "user_id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "movie_id": {
+                    "type": "integer"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Movie": {
             "type": "object",
+            "required": [
+                "genres",
+                "id",
+                "in_favourites",
+                "overview",
+                "poster",
+                "release_date",
+                "title"
+            ],
             "properties": {
                 "genres": {
                     "type": "array",
@@ -419,6 +489,9 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                },
+                "in_favourites": {
+                    "type": "boolean"
                 },
                 "overview": {
                     "type": "string"
@@ -466,6 +539,14 @@ const docTemplate = `{
                     }
                 },
                 "login_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "pkg_movies.FavouriteRequestParams": {
+            "type": "object",
+            "properties": {
+                "movie_id": {
                     "type": "integer"
                 }
             }

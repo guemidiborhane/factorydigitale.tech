@@ -32,6 +32,19 @@ export default function IndexMovies() {
     })
   }
 
+  const favourite = (event: MouseEvent) => {
+    const target = (event.target as HTMLButtonElement)
+    const movie_id = parseInt(target.dataset['movieId'] as string)
+    fetchApi('/api/movies/favourite', { method: 'post', body: { movie_id } }).then(response => {
+      if (response.ok) {
+        const { data } = response
+        console.log(data)
+
+        target.innerHTML = data.id == 0 ? '❤️' : '💔'
+      }
+    })
+  }
+
   return (
     <>
       <div className="grid grid-cols-5 gap-3">
@@ -39,7 +52,6 @@ export default function IndexMovies() {
           return (
             <div className="box !p-0 !border-gray-800 overflow-y-auto" style={{
               background: `url(${movie.poster})`,
-              height: 300,
               backgroundSize: 'contain'
             }}>
               <div className={styles.Shadow}>
@@ -48,6 +60,7 @@ export default function IndexMovies() {
                 <div className="flex flex-row gap-3 flex-wrap justify-center">
                   {movie.genres && movie.genres.map(genre => <span className="bg-yellow-300 rounded-full text-xs text-black py-1 px-2 font-semibold whitespace-nowrap">{genre}</span>)}
                 </div>
+                <Button onClick={favourite} data-movie-id={movie.id}>{movie.in_favourites ? '💔' : '❤️'}</Button>
               </div>
             </div>
           )

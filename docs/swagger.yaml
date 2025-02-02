@@ -12,6 +12,19 @@ definitions:
     - message
     - status
     type: object
+  github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Favourite:
+    properties:
+      id:
+        type: integer
+      movie_id:
+        type: integer
+      user_id:
+        type: integer
+    required:
+    - id
+    - movie_id
+    - user_id
+    type: object
   github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Movie:
     properties:
       genres:
@@ -20,6 +33,8 @@ definitions:
         type: array
       id:
         type: integer
+      in_favourites:
+        type: boolean
       overview:
         type: string
       poster:
@@ -28,6 +43,14 @@ definitions:
         type: integer
       title:
         type: string
+    required:
+    - genres
+    - id
+    - in_favourites
+    - overview
+    - poster
+    - release_date
+    - title
     type: object
   github_com_guemidiborhane_factorydigitale_tech_pkg_users_auth.UserResponse:
     properties:
@@ -51,6 +74,11 @@ definitions:
           type: array
         type: array
       login_count:
+        type: integer
+    type: object
+  pkg_movies.FavouriteRequestParams:
+    properties:
+      movie_id:
         type: integer
     type: object
   pkg_permissions.PermissionsParams:
@@ -223,7 +251,34 @@ paths:
             $ref: '#/definitions/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError'
       summary: Index Movies
       tags:
-      - Core
+      - Movie
+  /api/movies/favourite:
+    post:
+      parameters:
+      - description: Favourite Request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/pkg_movies.FavouriteRequestParams'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Favourite'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_guemidiborhane_factorydigitale_tech_internal_errors.HttpError'
+      summary: Toggle movie to/from your Favourites
+      tags:
+      - Movie
   /api/permissions:
     get:
       consumes:

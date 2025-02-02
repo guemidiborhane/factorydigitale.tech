@@ -8,13 +8,19 @@ export type APISchemas = {
     message: string | { [key: string]: string }
     status: number
   }
+  "github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Favourite": {
+    id: number
+    movie_id: number
+    user_id: number
+  }
   "github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Movie": {
-    genres?: Array<string>
-    id?: number
-    overview?: string
-    poster?: string
-    release_date?: number
-    title?: string
+    genres: Array<string>
+    id: number
+    in_favourites: boolean
+    overview: string
+    poster: string
+    release_date: number
+    title: string
   }
   "github_com_guemidiborhane_factorydigitale_tech_pkg_users_auth.UserResponse": {
     id: number
@@ -25,6 +31,7 @@ export type APISchemas = {
     ips?: Array<Array<string>>
     login_count?: number
   }
+  "pkg_movies.FavouriteRequestParams": { movie_id?: number }
   "pkg_permissions.PermissionsParams": { [key: string]: Array<string> }
   "pkg_permissions.PermissionsResponse": {
     permissions: { [key: string]: Array<string> }
@@ -63,6 +70,15 @@ export type APIEndpoints = {
       >
     }
     requests: { method?: "get"; query?: { offset?: number } }
+  }
+  "/api/movies/favourite": {
+    responses: {
+      post: APISchemas["github_com_guemidiborhane_factorydigitale_tech_pkg_movies_models.Favourite"]
+    }
+    requests: {
+      method: "post"
+      body: APISchemas["pkg_movies.FavouriteRequestParams"]
+    }
   }
   "/api/permissions": {
     responses: { get: APISchemas["pkg_permissions.PermissionsResponse"] }
