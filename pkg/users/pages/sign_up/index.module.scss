@@ -1,0 +1,9 @@
+.SignUpForm {
+    @apply bg-red-500;
+    @apply w-screen h-screen;
+    @apply flex justify-center items-center;
+
+    form {
+        @apply inline-flex flex-col gap-3;
+    }
+}

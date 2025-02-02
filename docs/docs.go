@@ -618,25 +618,13 @@ const docTemplate = `{
         "pkg_users.UserRegisterParams": {
             "type": "object",
             "required": [
-                "authenticable_id",
-                "authenticable_type",
                 "password",
-                "role",
                 "username"
             ],
             "properties": {
-                "authenticable_id": {
-                    "type": "integer"
-                },
-                "authenticable_type": {
-                    "type": "string"
-                },
                 "password": {
                     "type": "string",
                     "minLength": 6
-                },
-                "role": {
-                    "type": "string"
                 },
                 "username": {
                     "type": "string",

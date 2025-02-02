@@ -1,6 +1,7 @@
 package users
 
 import (
+	"github.com/guemidiborhane/factorydigitale.tech/internal/logger"
 	"github.com/guemidiborhane/factorydigitale.tech/internal/setup"
 	"github.com/guemidiborhane/factorydigitale.tech/pkg/permissions"
 	"github.com/guemidiborhane/factorydigitale.tech/pkg/users/auth"
@@ -42,6 +43,7 @@ func createDefaultUsers(db *gorm.DB) error {
 	}
 
 	if len(users) == 0 {
+		logger.Info("Creating default users since none are registered yet", logger.Attrs{})
 		createUser("root", "password")
 		createUser("admin", "password")
 	}

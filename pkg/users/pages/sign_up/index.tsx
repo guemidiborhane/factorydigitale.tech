@@ -1,7 +1,6 @@
 import {
     ActionFunctionArgs,
     Form,
-    Link,
     LoaderFunctionArgs,
     redirect,
     useActionData,
@@ -17,22 +16,30 @@ import { APISchemas } from "~/api";
 import { checkUser } from "~/helpers";
 import Toaster from "ui/Toaster";
 import { fetchUser } from "~/stores/user";
-import { routes } from "~/router";
 
 export async function action({ request }: ActionFunctionArgs) {
     const { signal } = request;
-    const back = (new URL(request.url)).searchParams.get('back')
 
-    const body = Object.fromEntries(await request.formData()) as APISchemas['pkg_users_auth.LoginParams']
-    const response = await fetchApi("/api/auth", {
+    const body = Object.fromEntries(await request.formData()) as APISchemas['pkg_users.UserRegisterParams']
+    const response = await fetchApi("/api/users", {
         method: 'post',
         signal,
         body,
     })
 
     if (response.ok) {
-        fetchUser()
-        return redirect(back || "/")
+        console.log('signup, now login')
+        const signinResponse = await fetchApi("/api/auth", {
+            method: 'post', signal, body
+        })
+
+        if (signinResponse.ok) {
+            const back = (new URL(request.url)).searchParams.get('back')
+            fetchUser()
+            return redirect(back || "/")
+        }
+
+        return null
     }
 
     return response.error;
@@ -54,13 +61,11 @@ export default function LoginPage() {
 
     return (
         <div dir={useDirection()}>
-            <div class={styles.LoginForm}>
+            <div class={styles.SignUpForm}>
                 <Form method="POST" class="box">
-                    {action?.code == 'unauthorized' && <h1>Unauthorized</h1>}
                     <Input name="username" label="models.user.username" autofocus />
                     <Input name="password" type="password" label="models.user.password" />
-                    <Button type="Success">{t('misc.sign_in')}</Button>
-                    <Link to={routes.users_sign_up}>Sign up</Link>
+                    <Button type="Success">{t('misc.sign_up')}</Button>
                 </Form>
             </div>
 

@@ -26,6 +26,8 @@ func Register(c *fiber.Ctx) error {
 		return errors.Unexpected(err.Error())
 	}
 
+	user.Role = "user"
+
 	if err := user.Create(); err != nil {
 		return err
 	}

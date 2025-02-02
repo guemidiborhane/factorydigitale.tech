@@ -8,6 +8,7 @@ import (
 
 func Setup(c *setup.Config) {
 	permissions.RegisterPermissions("movies", permissions.DefaultActions)
+	permissions.RegisterPermissions("movies", []string{"favourite"})
 	models.Setup(*c.Database)
 	setupRoutes((*c.Router))
 }

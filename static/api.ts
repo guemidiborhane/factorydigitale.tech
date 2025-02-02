@@ -45,13 +45,7 @@ export type APISchemas = {
     tracks: APISchemas["github_com_guemidiborhane_factorydigitale_tech_pkg_users_auth.UserTracks"]
     user: APISchemas["github_com_guemidiborhane_factorydigitale_tech_pkg_users_auth.UserResponse"]
   }
-  "pkg_users.UserRegisterParams": {
-    authenticable_id: number
-    authenticable_type: string
-    password: string
-    role: string
-    username: string
-  }
+  "pkg_users.UserRegisterParams": { password: string; username: string }
   "pkg_users_auth.LoginParams": { password: string; username: string }
   "pkg_users_auth.UserResponse": { id: number; role: string; username: string }
 }

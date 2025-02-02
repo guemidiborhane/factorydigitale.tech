@@ -10,11 +10,11 @@ var API fiber.Router
 func setupAPIRoutes(a *fiber.App) {
 	API = a.Group("/api",
 		EncryptCookies(),
-		HelmetMiddleware,
+		// HelmetMiddleware,
 		CorsMiddleware,
 		logger.Middleware,
-		CompressMiddleware,
-		EtagMiddleware,
+		// CompressMiddleware,
+		// EtagMiddleware,
 		CsrfMiddleware(),
 		RequestIDMiddleware,
 	)

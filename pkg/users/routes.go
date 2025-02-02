@@ -8,7 +8,7 @@ import (
 
 func SetupRoutes(r fiber.Router) {
 	group := r.Group("/auth")
-	group.Post("/users", Can("users:create"), validateRegister, Register)
+	r.Post("/users", validateRegister, Register)
 
 	authRoutes(group)
 	permissionsRoutes(r)

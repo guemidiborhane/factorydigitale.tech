@@ -7,11 +7,8 @@ import (
 )
 
 type UserRegisterParams struct {
-	Username          string `json:"username" validate:"required,min=3,max=20" gorm:"uniqueIndex"`
-	Password          string `json:"password" validate:"required,min=6"`
-	Role              string `json:"role" validate:"required"`
-	AuthenticableType string `json:"authenticable_type" validate:"required"`
-	AuthenticableID   int    `json:"authenticable_id" validate:"required"`
+	Username string `json:"username" validate:"required,min=3,max=20" gorm:"uniqueIndex"`
+	Password string `json:"password" validate:"required,min=6"`
 }
 
 func validateRegister(c *fiber.Ctx) error {
