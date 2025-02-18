@@ -1,4 +1,4 @@
-PROJECT_NAME := himaya-go
+PROJECT_NAME := factory-digitale
 user := $(shell id -u)
 group := $(shell id -g)
 
